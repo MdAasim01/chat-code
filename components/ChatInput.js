@@ -19,7 +19,7 @@ export default function ChatInput({ onSend }) {
   }
 
   return (
-    <div className="border-t px-3 py-3" style={{ borderColor: "var(--border)", background: "var(--card)" }}>
+    <div className="border-t px-3 py-3 sticky bottom-0" style={{ borderColor: "var(--border)", background: "var(--card)" }}>
       <div className="mx-auto flex flex-col gap-2">
         <div className="flex gap-2">
           <textarea

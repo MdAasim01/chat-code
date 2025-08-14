@@ -4,7 +4,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Home() {
   return (
-    <main className="h-full w-full grid grid-rows-[auto,1fr]">
+    <main className="h-full w-full">
       {/* Top Bar */}
       <div
         className="h-14 flex items-center justify-between px-4 border-b"

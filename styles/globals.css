@@ -27,7 +27,8 @@
   /* deep plum-ish to match accent */
   --fg: #f5f2ec;
   /* base as foreground */
-  --muted: #1a161a;
+  /* --muted: #1a161a; */
+    --muted: #312931;
   --card: #171317;
   --border: rgba(255, 255, 255, 0.08);
   --accent: #8b3f6b;
@@ -66,6 +67,7 @@ body {
 }
 .prose code {
   background: color-mix(in oklab, var(--muted) 80%, var(--bg));
+  /* background: var(--muted); */
   padding: 0.1rem 0.35rem;
   border-radius: 0.4rem;
 }
