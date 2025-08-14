@@ -1,9 +1,9 @@
-# Chat Code — Two-Persona AI Chat Application
+# Chat Code — Ai Persona of Hitesh and Piyush Sir from ChaiAurCode
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-green)](https://chat-aur-code.vercel.app/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/MdAasim01/chat-code)
 
-An interactive, responsive, and modern **two-persona AI chat application** built with **Next.js (App Router)**, **Tailwind CSS**, **Zustand**, and **OpenAI API**.  
+An interactive, responsive, and modern **Ai Persona of Hitesh and Piyush Sir from ChaiAurCode** built with **Next.js (App Router)**, **Tailwind CSS**, **Zustand**, and **OpenAI API**.  
 Features real-time streaming responses, persistent conversation history, theming, and multiple UI/UX enhancements.
 
 ---
