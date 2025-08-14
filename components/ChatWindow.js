@@ -36,6 +36,7 @@ export default function ChatWindow() {
 		[personas, activePersonaId]
 	);
 	const messages = getMessages(activePersonaId);
+	const hasMessages = messages.length > 0;
 	const isTyping = !!typing?.[activePersonaId];
 	const isClient = useIsClient();
 	const bottomRef = useRef(null);
@@ -50,14 +51,15 @@ export default function ChatWindow() {
 		const el = scrollRef.current;
 		if (!el) return;
 		const onScroll = () => {
+			const contentOverflow = el.scrollHeight > el.clientHeight + 1;
 			const nearBottom =
 				el.scrollHeight - el.scrollTop - el.clientHeight < 48;
-			setShowDown(!nearBottom);
+			setShowDown(hasMessages && contentOverflow && !nearBottom);
 		};
 		el.addEventListener("scroll", onScroll, { passive: true });
 		onScroll();
 		return () => el.removeEventListener("scroll", onScroll);
-	}, []);
+	}, [hasMessages]);
 
 	async function handleSend(userText) {
 		addMessage(activePersonaId, {
@@ -221,7 +223,7 @@ export default function ChatWindow() {
 				<div ref={bottomRef} />
 
 				{/* Scroll-to-bottom FAB */}
-				{showDown && (
+				{showDown && hasMessages && (
 					<button
 						onClick={() =>
 							bottomRef.current?.scrollIntoView({
