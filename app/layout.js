@@ -21,8 +21,12 @@ export default function RootLayout({ children }) {
                 try {
                   var t = localStorage.getItem('theme') || 'light';
                   document.documentElement.dataset.theme = t;
+                  // Legacy mode (kept): sm|md|lg
                   var f = localStorage.getItem('fontSize') || 'md';
                   document.documentElement.dataset.font = f;
+                  // New: pixel-based font size from slider (overrides)
+                  var fpx = localStorage.getItem('fontSizePx');
+                  if (fpx) { document.documentElement.style.fontSize = fpx + 'px'; }
                 } catch(e){}
               })();
             `,

@@ -41,7 +41,7 @@ export default function ChatInput({ onSend }) {
 					/>
 					<button
 						onClick={send}
-						className="w-[66px] h-[66px] rounded-full font-medium shadow-sm cursor-pointer grid place-items-center"
+						className="w-14 h-14 rounded-full font-medium shadow-sm cursor-pointer grid place-items-center"
 						style={{
 							background: "var(--accent)",
 							color: "var(--accent-ink)",
@@ -49,7 +49,7 @@ export default function ChatInput({ onSend }) {
 						aria-label="Send message"
 						title="Send message"
 					>
-						<Send size={18} />
+						<Send size={24} />
 					</button>
 				</div>
 				<div className="text-[11px] opacity-60">

@@ -20,7 +20,7 @@
   --bubble-ai: #ffffff;
   --bubble-ai-ink: #1e1a1d;
   --chip: #e9e1d7;
-  /* 10% */
+  --placeholder-opacity: .55;
 }
 
 :root[data-theme="dark"] {
@@ -40,6 +40,7 @@
   --bubble-ai: #221b21;
   --bubble-ai-ink: #f5f2ec;
   --chip: #2a2329;
+  --placeholder-opacity: .6;
 }
 
 /* -------------------------------------------------------
@@ -78,6 +79,19 @@ body {
   color: var(--fg);
 }
 
+/* Inputs & placeholders (live-reactive to theme changes) */
+input,
+textarea {
+  color: var(--fg);
+  background: transparent;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--fg);
+  opacity: var(--placeholder-opacity);
+  transition: color .25s ease, opacity .25s ease;
+}
 /* Prose for Markdown (code-friendly) */
 .prose pre {
   background: var(--muted);
@@ -92,4 +106,45 @@ body {
   background: #000;
   padding: 0.1rem 0.35rem;
   border-radius: 0.4rem;
+}
+
+/*
+  Typing dot animation
+*/
+
+@keyframes dot-blink {
+
+  0%,
+  80%,
+  100% {
+    opacity: 0.2;
+    transform: translateY(0);
+  }
+
+  40% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+.typing-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.typing-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--bubble-ai-ink);
+  animation: dot-blink 1.2s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(2) {
+  animation-delay: .15s;
+}
+
+.typing-dots span:nth-child(3) {
+  animation-delay: .3s;
 }

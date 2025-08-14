@@ -17,7 +17,7 @@ export default function Home() {
           >
             AI
           </div>
-          <div className="font-semibold">Two-Persona Chat</div>
+          <div className="font-semibold">Chat Code — Ai Persona of Hitesh and Piyush Sir from ChaiAurCode</div>
         </div>
         <div className="flex items-center gap-3">
           <div className="hidden md:block text-xs px-2 py-1 rounded-lg" style={{ background: "var(--chip)" }}>

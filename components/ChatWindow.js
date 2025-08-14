@@ -150,6 +150,10 @@ export default function ChatWindow() {
       >
         {messages.map((m, i) => {
           const isUser = m.role === "user";
+          const isLatest = i === messages.length - 1;
+          const showTypingDots =
+            !isUser && isLatest && isTyping && (!m.content || m.content.length === 0);
+
           return (
             <div
               key={i}
@@ -180,7 +184,13 @@ export default function ChatWindow() {
                   borderTopRightRadius: isUser ? "0.35rem" : "1rem",
                 }}
               >
-                <Markdown>{m.content}</Markdown>
+                {showTypingDots ? (
+                  <div className="typing-dots">
+                    <span></span><span></span><span></span>
+                  </div>
+                ) : (
+                  <Markdown>{m.content}</Markdown>
+                )}
                 <div
                   className="mt-1 text-[10px] opacity-60"
                   suppressHydrationWarning

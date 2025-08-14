@@ -20,50 +20,57 @@ const personas = [
 ];
 
 export const useChatStore = create(
-  persist(
-    (set, get) => ({
-      personas,
-      activePersonaId: personas[0].id,
-      setActivePersona: (id) => set({ activePersonaId: id }),
+	persist(
+		(set, get) => ({
+			personas,
+			activePersonaId: personas[0].id,
+			setActivePersona: (id) => set({ activePersonaId: id }),
 
-      // { personaId: [ { role:'user'|'assistant', content, timestamp } ] }
-      messages: {},
-      getMessages: (personaId) => get().messages[personaId] || [],
-      addMessage: (personaId, message) => {
-        const existing = get().messages[personaId] || [];
-        set({
-          messages: { ...get().messages, [personaId]: [...existing, message] },
-        });
-      },
-      // Mutate last assistant message during streaming
-      appendToLastAssistant: (personaId, chunk) => {
-        const msgs = get().messages[personaId] || [];
-        const lastIdx = msgs.length - 1;
-        if (lastIdx >= 0 && msgs[lastIdx].role === "assistant") {
-          const updated = [...msgs];
-          updated[lastIdx] = {
-            ...updated[lastIdx],
-            content: (updated[lastIdx].content || "") + chunk,
-          };
-          set({ messages: { ...get().messages, [personaId]: updated } });
-        }
-      },
+			// { personaId: [ { role:'user'|'assistant', content, timestamp } ] }
+			messages: {},
+			getMessages: (personaId) => get().messages[personaId] || [],
+			addMessage: (personaId, message) => {
+				const existing = get().messages[personaId] || [];
+				set({
+					messages: {
+						...get().messages,
+						[personaId]: [...existing, message],
+					},
+				});
+			},
+			// Mutate last assistant message during streaming
+			appendToLastAssistant: (personaId, chunk) => {
+				const msgs = get().messages[personaId] || [];
+				const lastIdx = msgs.length - 1;
+				if (lastIdx >= 0 && msgs[lastIdx].role === "assistant") {
+					const updated = [...msgs];
+					updated[lastIdx] = {
+						...updated[lastIdx],
+						content: (updated[lastIdx].content || "") + chunk,
+					};
+					set({
+						messages: { ...get().messages, [personaId]: updated },
+					});
+				}
+			},
 
-      // Typing indicator per persona
-      typing: {}, // { personaId: boolean }
-      setTyping: (personaId, value) => {
-        const t = { ...(get().typing || {}) };
-        t[personaId] = !!value;
-        set({ typing: t });
-      },
+			// Typing indicator per persona
+			typing: {}, // { personaId: boolean }
+			setTyping: (personaId, value) => {
+				const t = { ...(get().typing || {}) };
+				t[personaId] = !!value;
+				set({ typing: t });
+			},
 
-      // Reset chat for a given persona
-      resetChat: (personaId) => {
-        const next = { ...(get().messages || {}) };
-        next[personaId] = [];
-        set({ messages: next });
-      },
-    }),
-    { name: "two-persona-chat" }
-  )
+			// Reset chat for a given persona
+			resetChat: (personaId) => {
+				const next = { ...(get().messages || {}) };
+				next[personaId] = [];
+				set({ messages: next });
+			},
+		}),
+		{
+			name: "Chat Code — Ai Persona of Hitesh and Piyush Sir from ChaiAurCode",
+		}
+	)
 );
