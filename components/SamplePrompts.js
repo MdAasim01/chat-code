@@ -8,17 +8,17 @@ import { Sparkles, Compass, Code2, GraduationCap } from "lucide-react";
  * Clicking a question fills the chat input and focuses it.
  */
 const ICONS = {
-  create: Sparkles,
-  explore: Compass,
   code: Code2,
+  explore: Compass,
   learn: GraduationCap,
+  life: Sparkles,
 };
 
 export default function SamplePrompts() {
   const { activePersonaId, samplePrompts, setDraft, focusInput } = useChatStore();
 
   const tabs = samplePrompts[activePersonaId] || [];
-  const [active, setActive] = useState(tabs[0]?.id || "create");
+  const [active, setActive] = useState(tabs[0]?.id || (tabs[0] && tabs[0].id));
   const activeTab = useMemo(
     () => tabs.find((t) => t.id === active) || tabs[0],
     [tabs, active]
@@ -36,48 +36,78 @@ export default function SamplePrompts() {
       </h1>
 
       {/* Pills / Tabs */}
-      <div className="flex flex-wrap gap-3 mb-6">
+      <div
+        className="flex flex-wrap gap-3 mb-6"
+        role="tablist"
+        aria-label="Suggestion categories"
+      >
         {tabs.map((t) => {
           const Icon = ICONS[t.id] || Sparkles;
           const selected = t.id === active;
+
           return (
             <button
               key={t.id}
+              role="tab"
+              aria-selected={selected}
               onClick={() => setActive(t.id)}
-              className={`cursor-pointer inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition`}
+              className={`cursor-pointer inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition
+                ${selected ? "shadow-sm" : ""}
+              `}
               style={{
-                background: selected ? "var(--muted)" : "color-mix(in oklab, var(--card) 94%, var(--muted))",
-                borderColor: "var(--border)",
+                background: selected
+                  ? "color-mix(in oklab, var(--muted) 75%, var(--card))"
+                  : "color-mix(in oklab, var(--card) 94%, var(--muted))",
+                borderColor: selected ? "var(--accent)" : "var(--border)",
+                color: "var(--fg)",
+              }}
+              onMouseEnter={(e) => {
+                if (!selected) {
+                  e.currentTarget.style.background =
+                    "color-mix(in oklab, var(--card) 86%, var(--muted))";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!selected) {
+                  e.currentTarget.style.background =
+                    "color-mix(in oklab, var(--card) 94%, var(--muted))";
+                }
               }}
             >
               <Icon size={16} />
-              {t.label}
+              <span className={`${selected ? "font-medium" : ""}`}>{t.label}</span>
             </button>
           );
         })}
       </div>
 
       {/* Questions */}
-      <div className="space-y-2">
+      <div className="space-y-2" role="list" aria-label="Sample questions">
         {(activeTab?.items || []).map((q, i) => (
           <button
             key={i}
+            role="listitem"
             onClick={() => useSample(q)}
-            className="w-full text-left rounded-xl border px-4 py-3 cursor-pointer transition"
+            className="w-full text-left rounded-xl border px-4 py-3 cursor-pointer transition group"
             style={{
               background: "color-mix(in oklab, var(--card) 92%, var(--muted))",
               borderColor: "var(--border)",
+              color: "var(--fg)",
             }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.background =
-                "color-mix(in oklab, var(--card) 86%, var(--muted))")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.background =
-                "color-mix(in oklab, var(--card) 92%, var(--muted))")
-            }
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background =
+                "color-mix(in oklab, var(--card) 86%, var(--muted))";
+              e.currentTarget.style.borderColor = "var(--accent)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background =
+                "color-mix(in oklab, var(--card) 92%, var(--muted))";
+              e.currentTarget.style.borderColor = "var(--border)";
+            }}
           >
-            {q}
+            <span className="inline-block transition-transform group-hover:translate-x-[1px]">
+              {q}
+            </span>
           </button>
         ))}
       </div>

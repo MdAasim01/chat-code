@@ -19,52 +19,91 @@ const personas = [
   },
 ];
 
-/** Persona-specific sample prompts (tabs) */
 const samplePrompts = {
-  hitesh: [
-    { id: "create", label: "Create", items: [
-      "Build a responsive Next.js landing page with Tailwind",
-      "Scaffold a Node API with auth and Prisma",
-      "Generate a devops checklist for a monorepo"
-    ]},
-    { id: "explore", label: "Explore", items: [
-      "Explain React Server Components in simple Hinglish",
-      "Compare Vite vs Next.js for SPA use-cases",
-      "How do WebWorkers help with performance?"
-    ]},
-    { id: "code", label: "Code", items: [
-      "Write a debounce utility in modern JS",
-      "Convert a callback API into Promises",
-      "Show an example of Zustand selector optimization"
-    ]},
-    { id: "learn", label: "Learn", items: [
-      "Roadmap to master modern JavaScript in 30 days",
-      "What is ISR vs SSR vs SSG in Next.js?",
-      "Explain Docker basics with a real analogy"
-    ]},
-  ],
-  piyush: [
-    { id: "create", label: "Create", items: [
-      "Design a scalable folder structure for a Next.js app",
-      "Create a RESTful products API with pagination & filters",
-      "Make a GitHub Actions pipeline for lint/test/deploy"
-    ]},
-    { id: "explore", label: "Explore", items: [
-      "Monolith vs microservices — practical tradeoffs",
-      "What’s a message queue? SQS vs Kafka",
-      "Rate limiting strategies for production APIs"
-    ]},
-    { id: "code", label: "Code", items: [
-      "Implement JWT auth (access + refresh) in Express",
-      "Write a Postgres query for top N items per group",
-      "Add file uploads to Next.js route handlers"
-    ]},
-    { id: "learn", label: "Learn", items: [
-      "System design: load balancer in simple words",
-      "How to structure services on AWS (ALB, ECS, ECR)",
-      "Caching strategies: CDN, Redis, HTTP cache"
-    ]},
-  ],
+	hitesh: [
+		{
+			id: "code",
+			label: "Code",
+			items: [
+				"React me ek basic todo app bana ke dikhao",
+				"Node.js ke saath MongoDB ka CRUD example do",
+				"Next.js me API routes ka demo dikhao",
+				"Authentication ke liye JWT kaise implement karte hain?",
+			],
+		},
+		{
+			id: "learn",
+			label: "Learn",
+			items: [
+				"JavaScript closures ka real-world example samjha do",
+				"React Hooks kaise kaam karte hain?",
+				"TypeScript ka quick overview de do",
+				"Git aur GitHub ka beginner tutorial batao",
+			],
+		},
+		{
+			id: "explore",
+			label: "Explore",
+			items: [
+				"Mujhe DevOps shuru karne ka roadmap chahiye",
+				"AI ko apne Next.js project me integrate kaise karein?",
+				"Full-stack developer banne ka step-by-step guide do",
+				"OpenAI API ka live demo dikhao",
+			],
+		},
+		{
+			id: "life",
+			label: "Life",
+			items: [
+				"Aap apna din kaise plan karte ho coding aur teaching ke beech?",
+				"Travel ne aapke career par kaise impact dala?",
+				"YouTube par content banate hue motivation kaise maintain karte ho?",
+				"Tech industry me burnout se kaise bachte ho?",
+			],
+		},
+	],
+	piyush: [
+		{
+			id: "code",
+			label: "Code",
+			items: [
+				"Node.js me authentication ka real-world example do",
+				"React performance optimization kaise karte ho?",
+				"Mujhe Python Flask ka ek API example chahiye",
+				"PostgreSQL ke saath backend API bana ke dikhao",
+			],
+		},
+		{
+			id: "learn",
+			label: "Learn",
+			items: [
+				"System design ka basic introduction do",
+				"Database indexing ka simple explanation do",
+				"REST aur GraphQL ka difference samjha do",
+				"Docker ka use karke project deploy kaise karein?",
+			],
+		},
+		{
+			id: "explore",
+			label: "Explore",
+			items: [
+				"Industry me microservices kaise implement hote hain?",
+				"Scaling backend ke liye best practices kya hain?",
+				"Serverless architecture ka overview do",
+				"Machine Learning ko web apps me kaise use karte ho?",
+			],
+		},
+		{
+			id: "life",
+			label: "Life",
+			items: [
+				"Full-time job ke saath side projects kaise manage karte ho?",
+				"Tech career me failures ko kaise handle karte ho?",
+				"Daily routine me learning ke liye time kaise nikalte ho?",
+				"Startup ya company join karne ka decision kaise lete ho?",
+			],
+		},
+	],
 };
 
 export const useChatStore = create(
@@ -86,6 +125,7 @@ export const useChatStore = create(
 					},
 				});
 			},
+			// mutate last assistant message during streaming
 			appendToLastAssistant: (personaId, chunk) => {
 				const msgs = get().messages[personaId] || [];
 				const lastIdx = msgs.length - 1;
@@ -136,6 +176,8 @@ export const useChatStore = create(
 				if (typeof fn === "function") fn();
 			},
 		}),
-		{ name: "two-persona-chat" }
+		{
+			name: "Chat Code — Ai Persona of Hitesh and Piyush Sir from ChaiAurCode",
+		}
 	)
 );

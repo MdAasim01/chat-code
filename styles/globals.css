@@ -96,6 +96,7 @@ textarea::placeholder {
 .prose pre {
   background: var(--muted);
   background: #000;
+  color: #fff;
     border: 1px solid var(--border);
   padding: 0.8rem 1rem;
   border-radius: 0.75rem;
@@ -104,6 +105,7 @@ textarea::placeholder {
 .prose code {
   background: color-mix(in oklab, var(--muted) 80%, var(--bg));
   background: #000;
+  color: #fff;
   padding: 0.1rem 0.35rem;
   border-radius: 0.4rem;
 }
