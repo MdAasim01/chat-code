@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+
+.prose pre {
+  background: #faf8f5; /* very light to match your base */
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 0.8rem 1rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+}
+.prose code {
+  background: #f7f4ef;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.4rem;
+}
