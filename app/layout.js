@@ -1,12 +1,19 @@
 import "@/styles/globals.css";
 
-export const metadata = { title: "Two-Persona AI Chat" };
+export const metadata = { title: "Chat Code — Ai Persona of Hitesh and Piyush Sir from ChaiAurCode" };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Set theme before hydration to avoid flash */}
+        {/* DM Sans font */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        {/* Set theme + font size before hydration to avoid flash */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -14,6 +21,8 @@ export default function RootLayout({ children }) {
                 try {
                   var t = localStorage.getItem('theme') || 'light';
                   document.documentElement.dataset.theme = t;
+                  var f = localStorage.getItem('fontSize') || 'md';
+                  document.documentElement.dataset.font = f;
                 } catch(e){}
               })();
             `,
