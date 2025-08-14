@@ -1,25 +1,43 @@
 "use client";
+import { useEffect, useRef } from "react";
 import { Send } from "lucide-react";
-import { useState } from "react";
+import { useChatStore } from "@/store/chatStore";
 
 export default function ChatInput({ onSend }) {
-  const [value, setValue] = useState("");
+	const { activePersonaId, getDraft, setDraft, registerInputFocus } =
+		useChatStore();
 
-  function send() {
-    const text = value.trim();
-    if (text) {
-      onSend(text);
-      setValue("");
-    }
-  }
-  function onKeyDown(e) {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      send();
-    }
-  }
+	const value = getDraft(activePersonaId);
+	const ref = useRef(null);
 
-  return (
+	useEffect(() => {
+		// register a focus function other components can call
+		registerInputFocus(() => {
+			ref.current?.focus();
+			// place caret at end
+			const el = ref.current;
+			if (el) {
+				const len = el.value.length;
+				el.setSelectionRange(len, len);
+			}
+		});
+	}, [registerInputFocus]);
+
+	function send() {
+		const text = (value || "").trim();
+		if (text) {
+			onSend(text);
+			setDraft(activePersonaId, ""); // clear draft
+		}
+	}
+	function onKeyDown(e) {
+		if (e.key === "Enter" && !e.shiftKey) {
+			e.preventDefault();
+			send();
+		}
+	}
+
+	return (
 		<div
 			className="border-t px-3 py-3 sticky bottom-0"
 			style={{ borderColor: "var(--border)", background: "var(--card)" }}
@@ -27,9 +45,12 @@ export default function ChatInput({ onSend }) {
 			<div className="flex flex-col gap-2">
 				<div className="flex gap-2">
 					<textarea
+						ref={ref}
 						rows={2}
 						value={value}
-						onChange={(e) => setValue(e.target.value)}
+						onChange={(e) =>
+							setDraft(activePersonaId, e.target.value)
+						}
 						onKeyDown={onKeyDown}
 						placeholder="Ask anything…  (Shift+Enter = new line, Enter = send)"
 						className="flex-1 resize-none rounded-xl px-3 py-2 outline-none border"
@@ -63,5 +84,5 @@ export default function ChatInput({ onSend }) {
 				</div>
 			</div>
 		</div>
-  );
+	);
 }

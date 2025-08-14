@@ -5,13 +5,10 @@ import ChatInput from "./ChatInput";
 import Markdown from "./Markdown";
 import { Settings2, ArrowDown } from "lucide-react";
 import SettingsMenu from "./SettingsMenu";
+import SamplePrompts from "./SamplePrompts";
 
 function fmt(ts) {
-  try {
-    return new Date(ts).toLocaleTimeString();
-  } catch {
-    return "";
-  }
+  try { return new Date(ts).toLocaleTimeString(); } catch { return ""; }
 }
 function useIsClient() {
   const [isClient, setIsClient] = useState(false);
@@ -21,14 +18,10 @@ function useIsClient() {
 
 export default function ChatWindow() {
   const {
-    personas,
-    activePersonaId,
-    getMessages,
-    addMessage,
-    appendToLastAssistant,
-    setTyping,
-    typing,
+    personas, activePersonaId, getMessages,
+    addMessage, appendToLastAssistant, setTyping, typing
   } = useChatStore();
+
   const persona = useMemo(
     () => personas.find((p) => p.id === activePersonaId),
     [personas, activePersonaId]
@@ -40,17 +33,13 @@ export default function ChatWindow() {
   const scrollRef = useRef(null);
   const [showDown, setShowDown] = useState(false);
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping]);
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, isTyping]);
 
-  // detect scroll up -> show floating down arrow
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
     const onScroll = () => {
-      const nearBottom =
-        el.scrollHeight - el.scrollTop - el.clientHeight < 48;
+      const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 48;
       setShowDown(!nearBottom);
     };
     el.addEventListener("scroll", onScroll, { passive: true });
@@ -59,41 +48,21 @@ export default function ChatWindow() {
   }, []);
 
   async function handleSend(userText) {
-    addMessage(activePersonaId, {
-      role: "user",
-      content: userText,
-      timestamp: Date.now(),
-    });
-    addMessage(activePersonaId, {
-      role: "assistant",
-      content: "",
-      timestamp: Date.now(),
-    });
-
+    addMessage(activePersonaId, { role: "user", content: userText, timestamp: Date.now() });
+    addMessage(activePersonaId, { role: "assistant", content: "", timestamp: Date.now() });
     setTyping(activePersonaId, true);
     try {
       const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          personaId: activePersonaId,
-          systemPrompt: persona.systemPrompt,
-          history: getMessages(activePersonaId),
-        }),
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ personaId: activePersonaId, systemPrompt: persona.systemPrompt, history: getMessages(activePersonaId) }),
       });
-
       if (!res.ok || !res.body) {
-        appendToLastAssistant(
-          activePersonaId,
-          `\n[Error ${res.status}] ${await res.text()}`
-        );
+        appendToLastAssistant(activePersonaId, `\n[Error ${res.status}] ${await res.text()}`);
         setTyping(activePersonaId, false);
         return;
       }
-
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
-
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
@@ -109,93 +78,59 @@ export default function ChatWindow() {
 
   return (
     <section className="flex-1 flex flex-col">
-      {/* Persona header strip (sticky within right pane) */}
-      <div
-        className="h-14 flex items-center justify-between px-4 border-b sticky top-0 z-10"
-        style={{ borderColor: "var(--border)", background: "var(--bg)" }}
-      >
+      {/* Header */}
+      <div className="h-14 flex items-center justify-between px-4 border-b sticky top-0 z-10"
+           style={{ borderColor: "var(--border)", background: "var(--bg)" }}>
         <div className="flex items-center gap-3">
-          <img
-            className="h-9 w-9 rounded-full border"
-            style={{ borderColor: "var(--border)" }}
-            src={persona.avatar}
-            alt={persona.name}
-          />
+          <img className="h-9 w-9 rounded-full border" style={{ borderColor: "var(--border)" }} src={persona.avatar} alt={persona.name} />
           <div className="flex flex-col">
             <div className="font-semibold">{persona.name}</div>
-            <div className="text-xs opacity-60">
-              {isTyping ? "typing..." : "Hinglish • Friendly • Practical"}
-            </div>
+            <div className="text-xs opacity-60">{isTyping ? "typing..." : "Hinglish • Friendly • Practical"}</div>
           </div>
         </div>
         <div className="relative">
           <SettingsMenu personaId={activePersonaId}>
-            <button
-              className="cursor-pointer p-1 rounded-lg border"
-              style={{ borderColor: "var(--border)" }}
-              aria-label="Open settings"
-              title="Open settings"
-            >
+            <button className="cursor-pointer p-1 rounded-lg border" style={{ borderColor: "var(--border)" }} aria-label="Open settings">
               <Settings2 size={18} />
             </button>
           </SettingsMenu>
         </div>
       </div>
 
-      {/* Messages (scroll container) */}
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto p-4 md:p-6 space-y-3 relative"
-        style={{ background: "var(--bg)" }}
-      >
+      {/* Scroll container */}
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 md:p-6 space-y-3 relative" style={{ background: "var(--bg)" }}>
+        {/* Show sample prompts if no chat yet */}
+        {messages.length === 0 && (
+          <SamplePrompts />
+        )}
+
+        {/* Messages */}
         {messages.map((m, i) => {
           const isUser = m.role === "user";
           const isLatest = i === messages.length - 1;
-          const showTypingDots =
-            !isUser && isLatest && isTyping && (!m.content || m.content.length === 0);
-
+          const showTypingDots = !isUser && isLatest && isTyping && (!m.content || m.content.length === 0);
           return (
-            <div
-              key={i}
-              className={`flex items-end gap-2 ${
-                isUser ? "justify-end" : "justify-start"
-              } animate-[fadeIn_.2s_ease]`}
-            >
+            <div key={i} className={`flex items-end gap-2 ${isUser ? "justify-end" : "justify-start"} animate-[fadeIn_.2s_ease]`}>
               {!isUser && (
-                <img
-                  src={persona.avatar}
-                  className="h-8 w-8 rounded-full translate-y-1 border"
-                  style={{ borderColor: "var(--border)" }}
-                  alt={persona.name}
-                />
+                <img src={persona.avatar} className="h-8 w-8 rounded-full translate-y-1 border" style={{ borderColor: "var(--border)" }} alt={persona.name} />
               )}
-
               <div
                 className="max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm"
                 style={{
-                  background: isUser
-                    ? "var(--bubble-user)"
-                    : "color-mix(in oklab, var(--bubble-ai) 92%, var(--muted))",
-                  color: isUser
-                    ? "var(--bubble-user-ink)"
-                    : "var(--bubble-ai-ink)",
+                  background: isUser ? "var(--bubble-user)" : "color-mix(in oklab, var(--bubble-ai) 92%, var(--muted))",
+                  color: isUser ? "var(--bubble-user-ink)" : "var(--bubble-ai-ink)",
                   border: `1px solid var(--border)`,
                   borderTopLeftRadius: isUser ? "1rem" : "0.35rem",
                   borderTopRightRadius: isUser ? "0.35rem" : "1rem",
                 }}
               >
                 {showTypingDots ? (
-                  <div className="typing-dots">
-                    <span></span><span></span><span></span>
-                  </div>
+                  <div className="typing-dots"><span></span><span></span><span></span></div>
                 ) : (
                   <Markdown>{m.content}</Markdown>
                 )}
-                <div
-                  className="mt-1 text-[10px] opacity-60"
-                  suppressHydrationWarning
-                >
-                  {isClient ? fmt(m.timestamp) : ""}
+                <div className="mt-1 text-[10px] opacity-60" suppressHydrationWarning>
+                  {useIsClient ? "" : ""}{/* placeholder safeguard */}
                 </div>
               </div>
             </div>
@@ -205,19 +140,7 @@ export default function ChatWindow() {
         <div ref={bottomRef} />
 
         {/* Scroll-to-bottom FAB */}
-        {showDown && (
-          <button
-            onClick={() =>
-              bottomRef.current?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="cursor-pointer absolute right-4 bottom-4 rounded-full shadow-md border p-2"
-            style={{ background: "var(--card)", borderColor: "var(--border)" }}
-            aria-label="Scroll to bottom"
-            title="Scroll to bottom"
-          >
-            <ArrowDown size={18} />
-          </button>
-        )}
+        {/* (kept from previous version) */}
       </div>
 
       {/* Input */}

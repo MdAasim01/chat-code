@@ -19,6 +19,54 @@ const personas = [
   },
 ];
 
+/** Persona-specific sample prompts (tabs) */
+const samplePrompts = {
+  hitesh: [
+    { id: "create", label: "Create", items: [
+      "Build a responsive Next.js landing page with Tailwind",
+      "Scaffold a Node API with auth and Prisma",
+      "Generate a devops checklist for a monorepo"
+    ]},
+    { id: "explore", label: "Explore", items: [
+      "Explain React Server Components in simple Hinglish",
+      "Compare Vite vs Next.js for SPA use-cases",
+      "How do WebWorkers help with performance?"
+    ]},
+    { id: "code", label: "Code", items: [
+      "Write a debounce utility in modern JS",
+      "Convert a callback API into Promises",
+      "Show an example of Zustand selector optimization"
+    ]},
+    { id: "learn", label: "Learn", items: [
+      "Roadmap to master modern JavaScript in 30 days",
+      "What is ISR vs SSR vs SSG in Next.js?",
+      "Explain Docker basics with a real analogy"
+    ]},
+  ],
+  piyush: [
+    { id: "create", label: "Create", items: [
+      "Design a scalable folder structure for a Next.js app",
+      "Create a RESTful products API with pagination & filters",
+      "Make a GitHub Actions pipeline for lint/test/deploy"
+    ]},
+    { id: "explore", label: "Explore", items: [
+      "Monolith vs microservices — practical tradeoffs",
+      "What’s a message queue? SQS vs Kafka",
+      "Rate limiting strategies for production APIs"
+    ]},
+    { id: "code", label: "Code", items: [
+      "Implement JWT auth (access + refresh) in Express",
+      "Write a Postgres query for top N items per group",
+      "Add file uploads to Next.js route handlers"
+    ]},
+    { id: "learn", label: "Learn", items: [
+      "System design: load balancer in simple words",
+      "How to structure services on AWS (ALB, ECS, ECR)",
+      "Caching strategies: CDN, Redis, HTTP cache"
+    ]},
+  ],
+};
+
 export const useChatStore = create(
 	persist(
 		(set, get) => ({
@@ -26,7 +74,7 @@ export const useChatStore = create(
 			activePersonaId: personas[0].id,
 			setActivePersona: (id) => set({ activePersonaId: id }),
 
-			// { personaId: [ { role:'user'|'assistant', content, timestamp } ] }
+			// messages per persona
 			messages: {},
 			getMessages: (personaId) => get().messages[personaId] || [],
 			addMessage: (personaId, message) => {
@@ -38,7 +86,6 @@ export const useChatStore = create(
 					},
 				});
 			},
-			// Mutate last assistant message during streaming
 			appendToLastAssistant: (personaId, chunk) => {
 				const msgs = get().messages[personaId] || [];
 				const lastIdx = msgs.length - 1;
@@ -54,23 +101,41 @@ export const useChatStore = create(
 				}
 			},
 
-			// Typing indicator per persona
-			typing: {}, // { personaId: boolean }
+			// typing state per persona
+			typing: {},
 			setTyping: (personaId, value) => {
 				const t = { ...(get().typing || {}) };
 				t[personaId] = !!value;
 				set({ typing: t });
 			},
 
-			// Reset chat for a given persona
+			// reset chat for persona
 			resetChat: (personaId) => {
 				const next = { ...(get().messages || {}) };
 				next[personaId] = [];
 				set({ messages: next });
 			},
+
+			// sample prompts
+			samplePrompts,
+
+			// input draft per persona (so clicking a suggestion fills input)
+			inputDrafts: {},
+			getDraft: (personaId) => get().inputDrafts?.[personaId] || "",
+			setDraft: (personaId, value) => {
+				const drafts = { ...(get().inputDrafts || {}) };
+				drafts[personaId] = value;
+				set({ inputDrafts: drafts });
+			},
+
+			// allow ChatWindow/SamplePrompts to programmatically focus the input
+			_focusHandler: null,
+			registerInputFocus: (fn) => set({ _focusHandler: fn }),
+			focusInput: () => {
+				const fn = get()._focusHandler;
+				if (typeof fn === "function") fn();
+			},
 		}),
-		{
-			name: "Chat Code — Ai Persona of Hitesh and Piyush Sir from ChaiAurCode",
-		}
+		{ name: "two-persona-chat" }
 	)
 );
