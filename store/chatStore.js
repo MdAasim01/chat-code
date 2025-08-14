@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { HITESH_PROMPT, PIYUSH_PROMPT } from "../lib/prompts";
+import { HITESH_PROMPT, PIYUSH_PROMPT } from "@/lib/prompts";
 
 const personas = [
   {

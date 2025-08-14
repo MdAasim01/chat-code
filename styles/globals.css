@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+/* -------------------------------------------------------
+   THEME TOKENS (edit these 2 blocks to rebrand quickly)
+   Your colors: #f5f2ec (base), #51213d (accent)
+   ----------------------------------------------------- */
+:root[data-theme="light"] {
+  --bg: #f5f2ec;
+  /* base 60% */
+  --fg: #201a1e;
+  --muted: #efeae1;
+  --card: #ffffff;
+  --border: rgba(0, 0, 0, 0.08);
+  --accent: #51213d;
+  /* 30% */
+  --accent-ink: #ffffff;
+  --bubble-user: var(--accent);
+  --bubble-user-ink: #ffffff;
+  --bubble-ai: #ffffff;
+  --bubble-ai-ink: #1e1a1d;
+  --chip: #e9e1d7;
+  /* 10% */
+}
+
+:root[data-theme="dark"] {
+  --bg: #120f12;
+  /* deep plum-ish to match accent */
+  --fg: #f5f2ec;
+  /* base as foreground */
+  --muted: #1a161a;
+  --card: #171317;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #8b3f6b;
+  /* derived from #51213d for dark */
+  --accent-ink: #fff7fb;
+  --bubble-user: var(--accent);
+  --bubble-user-ink: #fff7fb;
+  --bubble-ai: #221b21;
+  --bubble-ai-ink: #f5f2ec;
+  --chip: #2a2329;
+}
+
+/* Smooth theme transitions */
+* {
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease;
+}
+
+html,
+body,
+#__next {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* Prose for Markdown (code-friendly) */
+.prose pre {
+  background: var(--muted);
+    border: 1px solid var(--border);
+  padding: 0.8rem 1rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+}
+.prose code {
+  background: color-mix(in oklab, var(--muted) 80%, var(--bg));
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.4rem;
+}
