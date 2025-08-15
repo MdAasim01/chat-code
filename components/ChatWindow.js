@@ -182,7 +182,7 @@ export default function ChatWindow() {
 								/>
 							)}
 							<div
-								className="max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm"
+								className="max-w-[65%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm"
 								style={{
 									background: isUser
 										? "var(--bubble-user)"
