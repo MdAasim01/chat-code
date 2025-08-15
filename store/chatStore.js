@@ -45,10 +45,10 @@ const samplePrompts = {
 			id: "explore",
 			label: "Explore",
 			items: [
-				"Mujhe DevOps shuru karne ka roadmap chahiye",
+				"Sir Mujhe DevOps shuru karni hai, roadmap dedo",
 				"AI ko apne Next.js project me integrate kaise karein?",
-				"Full-stack developer banne ka step-by-step guide do",
-				"OpenAI API ka live demo dikhao",
+				"Sir DSA kare ya Development",
+				"React ho gya hai, ab next sikh leni chahiye kya?",
 			],
 		},
 		{
@@ -58,7 +58,7 @@ const samplePrompts = {
 				"Aap apna din kaise plan karte ho coding aur teaching ke beech?",
 				"Travel ne aapke career par kaise impact dala?",
 				"YouTube par content banate hue motivation kaise maintain karte ho?",
-				"Tech industry me burnout se kaise bachte ho?",
+				"Job ke liye degree chahiye ya nahi?",
 			],
 		},
 	],
@@ -67,8 +67,8 @@ const samplePrompts = {
 			id: "code",
 			label: "Code",
 			items: [
-				"Node.js me authentication ka real-world example do",
-				"React performance optimization kaise karte ho?",
+				"Piyush sir, polyfill samjha do js me, with example",
+				"Sir ji apna khud ka Promise likh ke dikha do",
 				"Mujhe Python Flask ka ek API example chahiye",
 				"PostgreSQL ke saath backend API bana ke dikhao",
 			],
@@ -77,8 +77,8 @@ const samplePrompts = {
 			id: "learn",
 			label: "Learn",
 			items: [
-				"System design ka basic introduction do",
-				"Database indexing ka simple explanation do",
+				"System design sikha do sir",
+				"Database indexing explain kr do",
 				"REST aur GraphQL ka difference samjha do",
 				"Docker ka use karke project deploy kaise karein?",
 			],
@@ -97,7 +97,7 @@ const samplePrompts = {
 			id: "life",
 			label: "Life",
 			items: [
-				"Full-time job ke saath side projects kaise manage karte ho?",
+				"Sir girlfriend kaise banaye?",
 				"Tech career me failures ko kaise handle karte ho?",
 				"Daily routine me learning ke liye time kaise nikalte ho?",
 				"Startup ya company join karne ka decision kaise lete ho?",
